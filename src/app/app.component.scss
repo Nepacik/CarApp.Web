@@ -1,0 +1,23 @@
+
+
+.background-dots-container {
+  align-items: center;
+  position: absolute;
+  z-index: -2;
+}
+
+.background-dot {
+  border-radius: 50%;
+  width: 600px;
+  height: 600px;
+}
+
+#background-dot-one {
+  background-color: crimson;
+}
+
+#background-dot-two {
+  background-color: bisque;
+}
+
+//95df4b

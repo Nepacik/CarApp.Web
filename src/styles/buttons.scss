@@ -1,0 +1,11 @@
+@import "colors";
+
+.button-primary {
+  color: $color-primary !important;
+  background-color: transparent!important;
+  border-color:$color-primary!important;
+}
+
+.button-secondary {
+  color: $color-primary;
+}

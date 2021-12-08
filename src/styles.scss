@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@import "styles/colors";
+@import "styles/buttons";
+
+body {
+  background-color: #141617 !important;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  color: $text-color !important;
+
+}
+.background-dots {
+  height: 600px;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  left:0;
+  top: 0;
+
+  filter: blur(8rem);
+  background-image: radial-gradient(circle at 15%, $color-primary 0%, $color-background 14%);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+#text-secondary {
+  color: $text-color-secondary
+}
+
+#text-primary {
+  color: $text-color;
+}
