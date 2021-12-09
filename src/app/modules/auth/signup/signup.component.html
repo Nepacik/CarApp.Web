@@ -10,28 +10,40 @@
               <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
               <p class="text-secondary mb-5">Please enter your login, email and password!</p>
 
-              <div class="form-outline form-white mb-5 ">
-                <input type="login" id="typeEmailX" class="form-control form-control-lg" />
-                <label class="form-label ml-2" for="typeEmailX">Login</label>
-              </div>
+              <form class="needs-validation" [formGroup]="registerForm" (ngSubmit)="attemptToRegister()">
+
+                <div class="form-outline form-white mb-5">
+                  <input [(ngModel)]="login" type="login" id="typeLoginX" class="form-control form-control-lg"
+                         formControlName="loginControll" >
+                  <label class="form-label ml-2" for="typeLoginX">Login</label>
+                  <div class="invalid-feedback">
+                    asgasgsdgdsf
+                  </div>
+                </div>
 
 
-              <div class="form-outline form-white mb-5 ">
-                <input type="login" id="asgasgagdsagsda" class="form-control form-control-lg" />
-                <label class="form-label ml-2" for="asgasgagdsagsda">Email</label>
-              </div>
+                <div class="form-outline form-white mb-5 ">
+                  <input [(ngModel)]="email" type="email" id="typeEmailX" class="form-control form-control-lg" formControlName="emailControll">
+                  <label class="form-label ml-2" for="typeEmailX">Email</label>
+                  <div class="invalid-feedback">
+                    asgasgsdgdsf
+                  </div>
+                </div>
 
-              <div class="form-outline form-white mb-5">
-                <input type="password" id="typePasswordX" class="form-control form-control-lg" />
-                <label class="form-label ml-2" for="typePasswordX">Password</label>
-              </div>
+                <div class="form-outline form-white mb-5">
+                  <input [(ngModel)]="password" type="password" id="typePasswordX"
+                         class="form-control form-control-lg" formControlName="passwordControll">
+                  <label class="form-label ml-2" for="typePasswordX">Password</label>
+                </div>
 
-              <div class="form-outline form-white mb-5">
-                <input type="password" id="sdagbgfdsbf" class="form-control form-control-lg" />
-                <label class="form-label ml-2" for="sdagbgfdsbf">Repeat Password</label>
-              </div>
+                <div class="form-outline form-white mb-5">
+                  <input [(ngModel)]="repeatPassword" type="password" id="typePasswordRepeatX"
+                         class="form-control form-control-lg" formControlName="repeatPasswordControll">
+                  <label class="form-label ml-2" for="typePasswordRepeatX">Repeat Password</label>
+                </div>
 
-              <button class="btn button-primary btn-lg px-5" type="submit">Register</button>
+                <button class="btn button-primary btn-lg px-5" type="submit">Register</button>
+              </form>
 
             </div>
 

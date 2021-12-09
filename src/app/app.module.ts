@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import { NavbarComponent } from './components/navbar/navbar.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { TestComponent } from './components/test/test.component';
@@ -9,6 +9,9 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {AuthModule} from "./modules/auth/auth.module";
 import {RouterModule} from "@angular/router";
+import {NetworkInterceptor} from "./network/network.interceptor";
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -21,6 +24,8 @@ import {RouterModule} from "@angular/router";
     AuthModule,
     HttpClientModule,
     NgbModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -31,7 +36,13 @@ import {RouterModule} from "@angular/router";
     }),
     RouterModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NetworkInterceptor,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
