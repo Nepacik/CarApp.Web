@@ -12,18 +12,23 @@ import {RouterModule} from "@angular/router";
 import {NetworkInterceptor} from "./network/network.interceptor";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { HomeComponent } from './components/home/home.component';
+import {AppRoutingModule} from "./app-routing.module";
+import {UserModule} from "./modules/user/user.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    TestComponent
+    TestComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     AuthModule,
     HttpClientModule,
     NgbModule,
+    UserModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({
@@ -34,7 +39,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
       },
       defaultLanguage: 'en'
     }),
-    RouterModule
+    RouterModule,
+    AppRoutingModule
   ],
   providers: [
     {
@@ -42,6 +48,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
       useClass: NetworkInterceptor,
       multi: true,
     }
+  ],
+  exports: [
   ],
   bootstrap: [AppComponent]
 })

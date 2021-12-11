@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {LoginDto} from "../dtos/login-dto";
 import {TokenDto} from "../dtos/token-dto";
 import {CreateAccountDto} from "../dtos/create-account-dto";
+import {RefreshTokenDto} from "../dtos/refresh-token-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,10 @@ export class AuthService {
 
   register(createAccountDto: CreateAccountDto): Observable<TokenDto> {
     return this.http.post<TokenDto>(`${this.baseUrl}authorization/register`, createAccountDto);
+  }
+
+  refreshToken(token: String): Observable<TokenDto> {
+    let refreshTokenDto: RefreshTokenDto = {refreshToken: token.toString()};
+    return this.http.post<TokenDto>(`${this.baseUrl}authorization/refreshToken`, refreshTokenDto);
   }
 }

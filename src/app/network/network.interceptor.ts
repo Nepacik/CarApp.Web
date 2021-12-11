@@ -3,23 +3,82 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpHeaders
+  HttpInterceptor, HttpHeaders, HttpErrorResponse
 } from '@angular/common/http';
-import {catchError, Observable, skipWhile, throwError} from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  Observable,
+  switchMap, take,
+  throwError
+} from 'rxjs';
 import {TokenStorage} from "../infrastructure/storage/token-storage";
 import {environment} from "../../environments/environment";
 import {TokenDto} from "../dtos/token-dto";
+import {Router} from "@angular/router";
+import {AuthService} from "../services/auth.service";
 
 @Injectable()
 export class NetworkInterceptor implements HttpInterceptor {
 
-  constructor(private tokenStorage: TokenStorage) {}
+  constructor(private tokenStorage: TokenStorage, private router: Router, private authService: AuthService) {}
 
   attempts = 0;
   private baseUrl = environment.API_URL;
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    return next.handle(this.addHeaders(request)).pipe(
+      catchError(err => {
+        if(err instanceof HttpErrorResponse && err.status === 401 && !(request.url.includes("authorization/login") || request.url.includes("authorization/register"))) {
+          return this.handleAuthError(request, next)
+        }
+
+        return throwError(err);
+
+      })
+    )
+
+  }
+
+  private handleAuthError(req: HttpRequest<any>, next: HttpHandler) {
+    if(!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+    }
+
+    const token = this.tokenStorage.getRefreshToken();
+
+    if(token) {
+      return this.authService.refreshToken(token).pipe(
+        switchMap((tokenResponse:any) => {
+          this.isRefreshing = false;
+          let tokenDto :TokenDto = {refreshToken: tokenResponse.refreshToken, accessToken: tokenResponse.accessToken};
+          this.tokenStorage.saveTokens(tokenDto)
+
+          this.refreshTokenSubject.next(tokenResponse.accessToken)
+
+          return next.handle(this.addHeaders(req))
+        }),
+        catchError((err => {
+          this.isRefreshing = false;
+          this.tokenStorage.clearTokens();
+          window.location.reload();
+          return throwError(err)
+        }))
+      )
+    }
+    return this.refreshTokenSubject.pipe(
+      filter(token => token !== null),
+      take(1),
+      switchMap((token) => next.handle(this.addHeaders(req))
+      ));
+  }
+
+  private addHeaders(request: HttpRequest<any>) {
     let accessToken = this.tokenStorage.getAccessToken()
     let headers = new HttpHeaders(
       {
@@ -34,42 +93,6 @@ export class NetworkInterceptor implements HttpInterceptor {
         'Authorization', "Bearer " + accessToken
       )
     }
-    let req = request.clone({
-      headers: headers,
-    });
-
-    return next.handle(req).pipe(
-      catchError(err => {
-        if(err.status === 401 && !(req.url.includes("authorization/login") || req.url.includes("authorization/register"))) {
-          if(this.handleAuthError(req, next)) {
-            return next.handle(req);
-          } else {
-            this.tokenStorage.clearTokens();
-            return new Observable<HttpEvent<any>>(err);
-          }
-        }
-        return new Observable<HttpEvent<any>>(err);
-      })
-    )
-
+    return request.clone({ headers: headers});
   }
-
-  private handleAuthError(req: HttpRequest<any>, next: HttpHandler): boolean {
-
-    req = req.clone().body.append('refreshToken', this.tokenStorage.getRefreshToken());
-    req = Object.assign(req, `${this.baseUrl}/authorization/refreshtoken`)
-    let successRefresh: boolean = false
-    while (this.attempts < 3 && !successRefresh) {
-      next.handle(req).subscribe((success: HttpEvent<TokenDto>) => {
-
-        let token: TokenDto = JSON.parse(JSON.stringify(success))
-        this.tokenStorage.saveTokens(token)
-        successRefresh = true;
-      }, error => {
-        this.attempts += 1;
-      })
-    }
-    return successRefresh;
-  }
-
 }

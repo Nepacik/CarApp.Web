@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean;
   role:string;
 
-  constructor(private tokenStorage:TokenStorage, private router: Router) {
+  constructor(private tokenStorage:TokenStorage) {
     this.userInfo = tokenStorage.getUserInfo();
     this.role = this.userInfo.getRole();
     this.isLoggedIn = this.userInfo.isLogged();

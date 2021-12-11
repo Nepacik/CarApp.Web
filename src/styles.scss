@@ -30,3 +30,37 @@ body {
 #text-primary {
   color: $text-color;
 }
+
+.color-on-surface {
+  background-color: $color-on-surface;
+}
+
+.border-color-primary {
+  border-color: $color-primary !important;
+}
+
+.border-color-secondary {
+  border-color: $text-color-secondary;
+}
+
+.tr {
+  color: $text-color;
+  th {
+  }
+}
+
+.table-striped > tbody > tr > td, .table-striped > tbody > tr > th {
+  background-color: transparent;
+  border-color: $text-color-secondary;
+  color: $text-color;
+}
+
+.table-striped > thead > tr > th {
+  background-color: $color-background;
+  color: $text-color;
+  border-color: $text-color;
+}
+
+.color-primary {
+  color: $color-primary;
+}
