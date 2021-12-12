@@ -23,7 +23,7 @@ export class UserService {
     });
   }
 
-  getUserCars(): Observable<UserCarsDto> {
-    return this.http.get<UserCarsDto>(`${this.baseUrl}userCar`)
+  getUserCars(id: number): Observable<UserCarsDto> {
+    return this.http.get<UserCarsDto>(`${this.baseUrl}userCar`, {params: {id: id}})
   }
 }

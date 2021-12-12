@@ -15,6 +15,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { HomeComponent } from './components/home/home.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {UserModule} from "./modules/user/user.module";
+import {AdminModule} from "./modules/admin/admin.module";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {UserModule} from "./modules/user/user.module";
     HttpClientModule,
     NgbModule,
     UserModule,
+    AdminModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     TranslateModule.forRoot({

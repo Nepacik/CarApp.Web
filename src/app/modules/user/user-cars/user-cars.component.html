@@ -1,1 +1,46 @@
-<p>user-cars works!</p>
+<section>
+  <div class="offset-1 col-10 p-5 col-lg-6 offset-lg-3">
+    <div class="color-on-surface">
+      <div *ngIf="response.isData">
+        <div class="row">
+          <div class="col-lg-6 col-12 ">
+            <div class="px-2 py-1">
+              <p >Id: {{response.data!.id}}</p>
+              <p >Nick: {{response.data!.nick}}</p>
+              <p >Email: {{response.data!.email}}</p>
+            </div>
+          </div>
+          <div class="col-lg-6 col-12">
+            <div class="break-text" *ngFor="let item of response.data!.cars">
+
+              <div class="border">
+                <div class="px-2 py-1">
+                  <h4>Car name</h4>
+                  <p>Brand: {{item.brand}}</p>
+                  <p>Model: {{item.model}}</p>
+                  <p>Engine: {{item.engine}}</p>
+                </div>
+              </div>
+              <div class="border">
+                <div class="px-2 py-1 ">
+                  <h4>Car name</h4>
+                  <p>Brand: brandName</p>
+                  <p>Model: modelName </p>
+                  <p>Engine: engineId</p>
+                </div>
+              </div>
+              <div class="border">
+                <div class="px-2 py-1">
+                  <h4>Car name</h4>
+                  <p>Brand: brandName</p>
+                  <p>Model: modelName</p>
+                  <p>Engine: engineId</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
